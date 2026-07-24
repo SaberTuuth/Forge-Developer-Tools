@@ -67,3 +67,28 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# Visual Studio
+.vs/
+*.VC.db
+*.VC.opendb
+
+# Build folders
+build/
+out/
+bin/
+Debug/
+Release/
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+
+# Visual Studio generated
+*.obj
+*.pdb
+*.ilk
+*.ipch
+*.suo
+*.user
+*.log
