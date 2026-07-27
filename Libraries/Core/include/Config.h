@@ -11,7 +11,7 @@ public:
 
     std::string ServerIP = "127.0.0.1";
 
-    uint16_t Port = 55000;
+    uint16_t Port = 8080;
 
     uint32_t WorkerTimeout = 10;
 

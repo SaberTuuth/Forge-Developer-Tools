@@ -12,6 +12,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(libraries/Core)
 add_subdirectory(Libraries/Networking)
+add_subdirectory(Applications/Server)
+add_subdirectory(Applications/Client)
 
 add_executable(
     Forge

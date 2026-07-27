@@ -6,6 +6,7 @@ PRIVATE
     src/Packet.cpp
     src/TcpServer.cpp
     src/TcpClient.cpp 
+    src/MessageHandler.cpp
 )
 
 target_include_directories(Networking

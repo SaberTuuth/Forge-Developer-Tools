@@ -51,10 +51,14 @@ void TcpServer::stop() {
 
 void TcpServer::accept() {
 	int addrlen = sizeof(address);
-	SOCKET new_socket = ::accept(server_fd, (struct sockaddr*)&address, &addrlen);
-	if (new_socket == INVALID_SOCKET) {
+	clientSocket = ::accept(server_fd, (struct sockaddr*)&address, &addrlen);
+	if (clientSocket == INVALID_SOCKET) {
 		std::cout << "Accept failed: " << WSAGetLastError() << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	std::cout << "Connection accepted" << std::endl;
+}
+
+SOCKET TcpServer::GetClientSocket() const {
+	return clientSocket;
 }

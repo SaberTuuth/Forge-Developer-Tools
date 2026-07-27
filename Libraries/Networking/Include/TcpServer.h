@@ -13,13 +13,13 @@ private:
     int server_fd;
     int port;
     sockaddr_in address;
+    SOCKET clientSocket;
 
 public:
     TcpServer(int port);
     ~TcpServer();
     void start();
-	void stop();
+    void stop();
     void accept();
-
-
+    SOCKET GetClientSocket() const;
 };
