@@ -46,3 +46,7 @@ SOCKET TcpClient::GetSocket() const
 {
 	return clientSocket;
 }
+
+HeartBeat TcpClient::GetHeartBeat() const {
+	return heartbeat;
+}

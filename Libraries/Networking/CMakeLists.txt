@@ -7,6 +7,7 @@ PRIVATE
     src/TcpServer.cpp
     src/TcpClient.cpp 
     src/MessageHandler.cpp
+    src/HeartBeat.cpp
 )
 
 target_include_directories(Networking

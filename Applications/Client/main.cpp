@@ -8,48 +8,49 @@ int main()
 {
 	Config config;
 
-    TcpClient client;
+	TcpClient client;
 
-    client.Connect("127.0.0.1", config.Port);
+	if (client.Connect("127.0.0.1", config.Port)) {
+		std::cout << "Connected to server!" << std::endl;
+	}
+	while (true)
+	{
+		std::string message;
 
-    std::cout << "Connected to server!" << std::endl;
+		std::cout << "> ";
+		std::getline(std::cin, message);
+		
+		if (message == "quit") {
+			client.Disconnect();
+			break;
+		}
 
-    while (true)
-    {
-        std::string message;
+		MessageHandler::SendMessage(client.GetSocket(), message.c_str(), static_cast<uint8_t>(message.size()));
 
-        std::cout << "> ";
-        std::getline(std::cin, message);
+		char buffer[256];
+		uint8_t length = 0;
 
-        if (message == "quit") {
-            client.Disconnect();
-            break;
-        }
+		NetworkResult result = MessageHandler::ReadMessage(client.GetSocket(), buffer, sizeof(buffer), length);
 
-        MessageHandler::SendMessage(
-            client.GetSocket(),
-            message.c_str(),
-            static_cast<uint8_t>(message.size()));
+		if (result != NetworkResult::Success)
+		{
+			std::cout << "Server disconnected.\n";
+			break;
+		}
 
-        char buffer[256];
-        uint8_t length = 0;
+		std::string response(buffer, length);
 
-        NetworkResult result = MessageHandler::ReadMessage(
-            client.GetSocket(),
-            buffer,
-            sizeof(buffer),
-            length);
+		std::cout << "Server: " << response << std::endl;
 
-        if (result != NetworkResult::Success)
-        {
-            std::cout << "Server disconnected.\n";
-            break;
-        }
+		std::string heartbeatMessage = "PING\n";
 
-        std::string response(buffer, length);
+		if(response == heartbeatMessage) {
+			std::cout << "Received heartbeat from server." << std::endl;
 
-        std::cout << "Server: " << response << std::endl;
-    }
+			MessageHandler::SendMessage(client.GetSocket(), "PONG\n", 5);
 
-    return 0;
+		}
+	}
+
+	return 0;
 }
