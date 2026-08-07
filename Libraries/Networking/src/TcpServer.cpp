@@ -32,6 +32,10 @@ TcpServer::TcpServer(int port) {
 		std::cout << "Bind failed: " << WSAGetLastError() << std::endl;
 		exit(EXIT_FAILURE);
 	}
+
+	jobManager.CreateJob(1, "make job", "do job");
+	jobManager.CreateJob(2, "make job 2", "do job 2");
+	jobManager.CreateJob(3, "make job 3", "do job 3");
 }
 
 TcpServer::~TcpServer() {
@@ -97,7 +101,7 @@ void TcpServer::Update() {
 		}
 	}
 
-	if(heartbeat.ShouldSend(3.0f)) {
+	if (heartbeat.ShouldSend(3.0f)) {
 		for (SOCKET client : clients) {
 			const char* heartbeatMessage = "PING\n";
 			MessageHandler::SendMessageA(client, heartbeatMessage, static_cast<uint8_t>(strlen(heartbeatMessage)));
@@ -122,10 +126,15 @@ void TcpServer::ReceiveClient(SOCKET clientSocket) {
 	uint8_t messageLength = 0;
 
 	NetworkResult result = MessageHandler::ReadMessage(clientSocket, buffer, sizeof(buffer), messageLength);
+	std::string command = buffer;
 
 	switch (result)
 	{
 	case NetworkResult::Success:
+		if (command.find("show") != std::string::npos) {
+			jobManager.ShowJobLists();
+			break;
+		}
 		std::cout << "Received data from client: "
 			<< std::string(buffer, messageLength)
 			<< std::endl;

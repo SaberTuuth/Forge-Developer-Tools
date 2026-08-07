@@ -19,4 +19,5 @@ target_link_libraries(Networking
 PUBLIC
     Core
     Ws2_32
+    JobSystem
 )

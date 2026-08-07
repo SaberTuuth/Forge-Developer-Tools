@@ -4,6 +4,7 @@
 #include <winsock2.h>
 #include <vector>
 #include "HeartBeat.h"
+#include "JobManager.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -20,6 +21,7 @@ private:
 	fd_set readySet;
 	SOCKET ListenSocket;
 	HeartBeat heartbeat;
+	JobManager jobManager;
 
 public:
 	TcpServer(int port);
