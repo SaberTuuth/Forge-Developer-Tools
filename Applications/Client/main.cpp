@@ -3,6 +3,8 @@
 #include "TcpClient.h"
 #include "Config.h"
 #include "MessageHandler.h"
+#include "User.h"
+
 
 int main()
 {
@@ -10,9 +12,7 @@ int main()
 
 	TcpClient client;
 
-	if (client.Connect("127.0.0.1", config.Port)) {
-		std::cout << "Connected to server!" << std::endl;
-	}
+	client.Connect(config.ServerIP, config.Port);
 	while (true)
 	{
 		std::string message;
@@ -46,9 +46,7 @@ int main()
 
 		if(response == heartbeatMessage) {
 			std::cout << "Received heartbeat from server." << std::endl;
-
 			MessageHandler::SendMessage(client.GetSocket(), "PONG\n", 5);
-
 		}
 	}
 

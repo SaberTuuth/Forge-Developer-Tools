@@ -1,9 +1,10 @@
 
 #include "TcpServer.h"
 #include <iostream>
+#include <sstream>
 #include "MessageHandler.h"
 
-TcpServer::TcpServer(int port) {
+TcpServer::TcpServer(int port) : authManager(userManager) {
 	this->port = port;
 
 	// Initialize Winsock
@@ -33,9 +34,9 @@ TcpServer::TcpServer(int port) {
 		exit(EXIT_FAILURE);
 	}
 
-	jobManager.CreateJob(1, "make job", "do job");
-	jobManager.CreateJob(2, "make job 2", "do job 2");
-	jobManager.CreateJob(3, "make job 3", "do job 3");
+	userManager.CreateUser(1, "Alice", "alice@example.com", "password");
+	userManager.CreateUser(2, "Bob", "bob@example.com", "password");
+	userManager.CreateUser(3, "Charlie", "charlie@example.com", "password");
 }
 
 TcpServer::~TcpServer() {
@@ -125,12 +126,56 @@ void TcpServer::ReceiveClient(SOCKET clientSocket) {
 	char buffer[256];
 	uint8_t messageLength = 0;
 
-	NetworkResult result = MessageHandler::ReadMessage(clientSocket, buffer, sizeof(buffer), messageLength);
+	NetworkResult result = MessageHandler::ReadMessage(clientSocket, buffer, sizeof(buffer) - 1, messageLength);
+	if (result == NetworkResult::Success) {
+		buffer[messageLength] = '\0';
+	}
 	std::string command = buffer;
 
 	switch (result)
 	{
 	case NetworkResult::Success:
+		if (command.rfind("login ", 0) == 0) {
+			std::istringstream iss(command.substr(6));
+			std::string username, password;
+			iss >> username >> password;
+
+			int userId = -1;
+			LoginResult loginResult = authManager.Login(username, password, userId);
+
+			std::string response;
+			switch (loginResult) {
+			case LoginResult::Success:
+				loggedInUsers[clientSocket] = userId;
+				response = "Login successful. Welcome, " + username + "!\n";
+				break;
+			case LoginResult::UserNotFound:
+				response = "Login failed: user not found.\n";
+				break;
+			case LoginResult::InvalidCredentials:
+				response = "Login failed: invalid credentials.\n";
+				break;
+			case LoginResult::AlreadyLoggedIn:
+				response = "Login failed: already logged in.\n";
+				break;
+			}
+			MessageHandler::SendMessage(clientSocket, response.c_str(), static_cast<uint8_t>(response.size()));
+			break;
+		}
+		if (command.rfind("logout", 0) == 0) {
+			auto it = loggedInUsers.find(clientSocket);
+			std::string response;
+			if (it != loggedInUsers.end()) {
+				authManager.Logout(it->second);
+				loggedInUsers.erase(it);
+				response = "Logged out.\n";
+			}
+			else {
+				response = "Not logged in.\n";
+			}
+			MessageHandler::SendMessage(clientSocket, response.c_str(), static_cast<uint8_t>(response.size()));
+			break;
+		}
 		if (command.find("show") != std::string::npos) {
 			jobManager.ShowJobLists();
 			break;
@@ -169,4 +214,10 @@ void TcpServer::RemoveClient(SOCKET clientSocket) {
 	closesocket(clientSocket);
 	FD_CLR(clientSocket, &masterSet);
 	clients.erase(std::remove(clients.begin(), clients.end(), clientSocket), clients.end());
+
+	auto it = loggedInUsers.find(clientSocket);
+	if (it != loggedInUsers.end()) {
+		authManager.Logout(it->second);
+		loggedInUsers.erase(it);
+	}
 }

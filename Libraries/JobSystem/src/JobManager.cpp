@@ -5,6 +5,7 @@
 void JobManager::CreateJob(uint32_t id, const std::string& name, const std::string& command) {
 	Job job(id, name, command);
 	jobList.push_back(job);
+	jobQueue.PushJob(job);
 }
 
 void JobManager::ShowJobLists() {

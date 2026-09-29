@@ -2,12 +2,14 @@
 
 #include <vector>
 #include "Job.h"
+#include "JobQueue.h"
 
 class JobManager {
 
 private:
 
 	std::vector<Job> jobList;
+	JobQueue jobQueue;
 
 public:
 

@@ -25,5 +25,5 @@ target_link_libraries(Forge
     PRIVATE
         Core
         Networking 
-	JobSystem
+	    JobSystem
 )

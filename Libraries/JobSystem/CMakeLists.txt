@@ -5,6 +5,7 @@ target_sources(JobSystem
      src/job.cpp
      src/jobqueue.cpp
      src/jobmanager.cpp
+     src/scheduler.cpp
 )
 
 target_include_directories(JobSystem

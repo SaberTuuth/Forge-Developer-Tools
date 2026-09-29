@@ -3,8 +3,11 @@
 #include <WS2tcpip.h>
 #include <winsock2.h>
 #include <vector>
+#include <unordered_map>
 #include "HeartBeat.h"
 #include "JobManager.h"
+#include "usermanager.h"
+#include "authentication.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -22,6 +25,9 @@ private:
 	SOCKET ListenSocket;
 	HeartBeat heartbeat;
 	JobManager jobManager;
+	UserManager userManager;
+	AuthManager authManager;
+	std::unordered_map<SOCKET, int> loggedInUsers;
 
 public:
 	TcpServer(int port);
