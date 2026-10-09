@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_subdirectory(libraries/Core)
 add_subdirectory(Libraries/Networking)
 add_subdirectory(Libraries/JobSystem)
+add_subdirectory(Libraries/Project)
 add_subdirectory(Applications/Server)
 add_subdirectory(Applications/Client)
 
@@ -26,4 +27,5 @@ target_link_libraries(Forge
         Core
         Networking 
 	    JobSystem
+        Project
 )

@@ -92,3 +92,6 @@ CMakeCache.txt
 *.suo
 *.user
 *.log
+
+# Claude Graphify
+graphify-out/
