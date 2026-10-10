@@ -14,6 +14,7 @@ add_subdirectory(libraries/Core)
 add_subdirectory(Libraries/Networking)
 add_subdirectory(Libraries/JobSystem)
 add_subdirectory(Libraries/Project)
+add_subdirectory(Libraries/Tasks)
 add_subdirectory(Applications/Server)
 add_subdirectory(Applications/Client)
 
@@ -28,4 +29,5 @@ target_link_libraries(Forge
         Networking 
 	    JobSystem
         Project
+        Tasks
 )
