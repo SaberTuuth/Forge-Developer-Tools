@@ -27,6 +27,7 @@ LoginResult AuthManager::Login(const std::string& username, const std::string& p
     }
 
     user->SetLastLoginAt(std::chrono::system_clock::now());
+    m_UserManager.UpdateUser(*user);
     m_ActiveSessions[user->GetId()] = user;
     outUserId = user->GetId();
     return LoginResult::Success;

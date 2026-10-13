@@ -4,7 +4,7 @@
 #include <sstream>
 #include "MessageHandler.h"
 
-TcpServer::TcpServer(int port) : authManager(userManager) {
+TcpServer::TcpServer(int port, UserRepository& users) : userManager(users), authManager(userManager) {
 	this->port = port;
 
 	// Initialize Winsock
@@ -33,10 +33,6 @@ TcpServer::TcpServer(int port) : authManager(userManager) {
 		std::cout << "Bind failed: " << WSAGetLastError() << std::endl;
 		exit(EXIT_FAILURE);
 	}
-
-	userManager.CreateUser(1, "Alice", "alice@example.com", "password");
-	userManager.CreateUser(2, "Bob", "bob@example.com", "password");
-	userManager.CreateUser(3, "Charlie", "charlie@example.com", "password");
 }
 
 TcpServer::~TcpServer() {

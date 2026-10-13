@@ -47,6 +47,11 @@ std::chrono::system_clock::time_point User::GetCreatedAt() const
     return CreatedAt;
 }
 
+void User::SetCreatedAt(std::chrono::system_clock::time_point createdAt)
+{
+    CreatedAt = createdAt;
+}
+
 std::chrono::system_clock::time_point User::GetLastLoginAt() const
 {
     return LastLoginAt;

@@ -18,6 +18,8 @@ public:
     void SetDisplayName(std::string displayName);
 
     std::chrono::system_clock::time_point GetCreatedAt() const;
+    void SetCreatedAt(std::chrono::system_clock::time_point createdAt);
+
     std::chrono::system_clock::time_point GetLastLoginAt() const;
     void SetLastLoginAt(std::chrono::system_clock::time_point lastLoginAt);
 

@@ -30,7 +30,7 @@ private:
 	std::unordered_map<SOCKET, int> loggedInUsers;
 
 public:
-	TcpServer(int port);
+	TcpServer(int port, UserRepository& users);
 	~TcpServer();
 	bool Listen();
 	void stop();

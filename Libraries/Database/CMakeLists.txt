@@ -3,6 +3,7 @@ add_library(Database STATIC)
 target_sources(Database
 	PRIVATE
 		src/database.cpp
+		src/schema.cpp
 )
 
 target_include_directories(Database
